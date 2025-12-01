@@ -2,142 +2,226 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Maurya Interior – Customer Reviews</title>
-  <style>
-    body{font-family:Arial, sans-serif; padding:18px; background:#f5f5f5; color:#222}
-    .card{background:#fff;border-radius:8px;padding:14px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-    #star-select span{font-size:30px;cursor:pointer;margin-right:4px}
-    #preview-photos img{width:72px;height:72px;object-fit:cover;border-radius:6px;margin:6px}
-    .small{font-size:13px;color:#555}
-    .rev-card{margin-bottom:12px}
-    .rev-card .stars{color:#ff9500;font-size:20px;margin-bottom:5px}
-    button{background:#0078ff;color:#fff;border:0;padding:8px 12px;border-radius:6px;cursor:pointer;margin-top:8px}
-    button:disabled{opacity:0.6}
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maurya Home and Office Interior</title>
+  <meta name="description" content="Professional interior design services in Pune by Ram Sajeevan Maurya. Specializing in beds, cupboards, wardrobes, and more." />
+  <meta property="og:title" content="Maurya Home and Office Interior Design" />
+  <meta property="og:description" content="Transforming homes and offices with premium plywood furniture. 4 years experience, ₹249 visiting charges, 15-year warranty." />
+  <meta property="og:image" content="hero-workshop.jpg" />
+  <style>
+    :root{--accent:#0b76ef;--muted:#666}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, Arial, sans-serif; margin:0; color:#222; line-height:1.5}
+    header{background:linear-gradient(180deg,#0b76ef 0%,#085bb5 100%); color:#fff; padding:40px 18px; text-align:center}
+    .hero {max-width:1100px;margin:0 auto;padding:30px 18px}
+    .hero h1{font-size:32px;margin:0 0 10px}
+    .hero p{font-size:16px; margin:0 0 14px}
+    .ctas{margin-top:12px}
+    .btn{background:#fff;color:var(--accent);padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:600}
+    main{max-width:1100px;margin:20px auto;padding:0 18px}
+    .grid{display:grid; grid-template-columns: 1fr; gap:18px}
+    .card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    h2{margin:0 0 10px}
+    .small{color:var(--muted);font-size:14px}
+    footer{padding:22px 18px;text-align:center;color:var(--muted)}
+    /* Reviews styles */
+    #reviews-section{margin-top:24px}
+    #star-select span{font-size:28px;cursor:pointer;margin-right:6px}
+    #preview-photos img{width:72px;height:72px;object-fit:cover;border-radius:6px;margin:6px}
+    .rev-card .stars{color:#ff9500;font-size:18px;margin-bottom:8px}
+    .reviews .card{margin-bottom:12px}
+    @media(min-width:800px){
+      .grid{grid-template-columns: 1fr 320px}
+      .hero h1{font-size:44px}
+    }
+  </style>
 </head>
 <body>
-<h1>Customer Reviews</h1>
-<div class="card">
-  <strong>Rate our Service</strong>
-  <div id="star-select" style="margin-top:8px;">
-    <span data-value="1">☆</span>
-    <span data-value="2">☆</span>
-    <span data-value="3">☆</span>
-    <span data-value="4">☆</span>
-    <span data-value="5">☆</span>
-  </div>
-  <textarea id="review-text" rows="3" placeholder="Write your review..." style="width:100%;margin-top:10px;padding:8px;border-radius:6px;border:1px solid #ccc"></textarea>
-  <label class="small">Upload photos (max 5)</label><br>
-  <input id="review-photos" type="file" accept="image/*" multiple />
-  <div id="preview-photos"></div>
-  <button id="submitBtn">Submit Review</button>
-  <span id="status" class="small"></span>
-</div>
-<h2>All Reviews</h2>
-<div id="all-reviews"></div>
-<!-- FIREBASE SCRIPTS -->
+<header>
+  <div class="hero">
+    <h1>Maurya Home and Office Interior</h1>
+    <p>Professional interior design services in Pune by <strong>Ram Sajeevan Maurya</strong>. Specializing in beds, cupboards, wardrobes, kitchen trolleys and complete interior solutions. 4 years experience. Visiting charges ₹249. 15-year furniture warranty, 5-year hardware warranty.</p>
+    <div class="ctas">
+      <a class="btn" href="#reviews-section">See Customer Reviews</a>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>Our Services</h2>
+        <p class="small">We design and manufacture premium plywood furniture — beds, wardrobes, modular kitchens, false ceilings, painting, POP work, wardrobes, sofas, dining tables and more.</p>
+      </div>
+      <div id="about" class="card" style="margin-top:16px">
+        <h2>About Us</h2>
+        <p>Maurya Home and Office Interior is a family-run workshop located at Walhekarwadi near London Bridge, Ravet, Pune. We focus on durability, style and customer satisfaction.</p>
+      </div>
+      <!-- Reviews widget inserted here -->
+      <section id="reviews-section" style="margin-top:20px">
+        <div class="card">
+          <h2>Customer Reviews</h2>
+          <p class="small">Share your experience — rate us and upload up to 5 photos.</p>
+          <div style="margin-top:10px">
+            <div id="star-select" aria-label="Star rating">
+              <span data-value="1">☆</span>
+              <span data-value="2">☆</span>
+              <span data-value="3">☆</span>
+              <span data-value="4">☆</span>
+              <span data-value="5">☆</span>
+            </div>
+            <textarea id="review-text" rows="3" placeholder="Write your review..." style="width:100%;margin-top:10px;padding:10px;border-radius:8px;border:1px solid #e6e6e6"></textarea>
+            <div style="margin-top:10px">
+              <label class="small">Upload photos (max 5)</label><br>
+              <input id="review-photos" type="file" accept="image/*" multiple />
+              <div id="preview-photos"></div>
+            </div>
+            <div style="margin-top:10px">
+              <button id="submitBtn" class="btn" style="background:var(--accent);color:#fff;border:none">Submit Review</button>
+              <span id="status" class="small" style="margin-left:10px"></span>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3>All Reviews</h3>
+          <div id="all-reviews" class="reviews"></div>
+        </div>
+      </section>
+      <!-- End reviews widget -->
+    </div>
+    <aside>
+      <div class="card">
+        <h3>Contact</h3>
+        <p class="small"><strong>Maurya Interior</strong><br>Walhekarwadi, near London Bridge, Ravet, Pune<br>Pin: 411033<br>Phone: +919696164429</p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>Visiting Charges</h3>
+        <p class="small">Visiting charges: ₹249</p>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer>
+  © Maurya Home & Office Interior — All rights reserved.
+</footer>
+<!-- FIREBASE + REVIEWS SCRIPT -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
-  // YOUR FIREBASE CONFIG (already filled)
-  const firebaseConfig = {
-    apiKey: "AIzaSyCcgGn8TrzWXhehhplnmMwnO9CzWi0poUA",
-    authDomain: "maurya-interior.firebaseapp.com",
-    databaseURL: "https://maurya-interior-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "maurya-interior",
-    storageBucket: "maurya-interior.firebasestorage.app",
-    messagingSenderId: "289546553710",
-    appId: "1:289546553710:web:6902612a1c41749832597f",
-    measurementId: "G-JKMR9GLQQQ"
-  };
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const storage = getStorage(app);
-  let selectedRating = 0;
-  // STAR SELECT
-  const starsEl = document.getElementById("star-select");
-  starsEl.querySelectorAll("span").forEach(s=>{
-    s.addEventListener("click", ()=>{
-      selectedRating = Number(s.dataset.value);
-      renderStars();
-    });
-  });
-  function renderStars(){
-    starsEl.querySelectorAll("span").forEach(s=>{
-      s.textContent = (Number(s.dataset.value) <= selectedRating) ? "★" : "☆";
-    });
-  }
-  // PHOTO PREVIEW
-  const preview = document.getElementById("preview-photos");
-  const photos = document.getElementById("review-photos");
-  photos.addEventListener("change", ()=>{
-    preview.innerHTML = "";
-    [...photos.files].slice(0,5).forEach(f=>{
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(f);
-      preview.appendChild(img);
-    });
-  });
-  // SUBMIT REVIEW
-  document.getElementById("submitBtn").addEventListener("click", async ()=>{
-    if(!selectedRating) return alert("Please select a rating!");
-    const text = document.getElementById("review-text").value;
-    const files = photos.files;
-    const status = document.getElementById("status");
-    status.textContent = "Uploading...";
-    status.style.color = "green";
-    let photoUrls = [];
-    for(let i=0;i<Math.min(5,files.length);i++){
-      const f = files[i];
-      const fileRef = sRef(storage, "reviews/" + Date.now() + "_" + f.name);
-      await uploadBytes(fileRef, f);
-      const url = await getDownloadURL(fileRef);
-      photoUrls.push(url);
-    }
-    await push(ref(db, "reviews"), {
-      rating: selectedRating,
-      text,
-      photos: photoUrls,
-      timestamp: Date.now()
-    });
-    status.textContent = "Review submitted!";
-    // RESET FORM
-    selectedRating = 0;
-    renderStars();
-    document.getElementById("review-text").value = "";
-    photos.value = "";
-    preview.innerHTML = "";
-    setTimeout(()=> status.textContent = "", 2000);
-  });
-  // SHOW ALL REVIEWS
-  const allReviews = document.getElementById("all-reviews");
-  onValue(ref(db, "reviews"), snap=>{
-    allReviews.innerHTML = "";
-    let items = [];
-    snap.forEach(s=> items.push(s.val()));
-    items.sort((a,b)=> b.timestamp - a.timestamp);
-    items.forEach(r=>{
-      const card = document.createElement("div");
-      card.className = "card rev-card";
-      const stars = "★".repeat(r.rating) + "☆".repeat(5-r.rating);
-      let imgs = "";
-      if(r.photos){
-        r.photos.forEach(p=>{
-          imgs += `<img src="${p}" style="width:80px;margin:5px;border-radius:6px">`;
-        });
-      }
-      card.innerHTML = `
-        <div class="stars">${stars}</div>
-        <p>${r.text || ""}</p>
-        <div>${imgs}</div>
-        <div class="small">${new Date(r.timestamp).toLocaleString()}</div>
-      `;
-      allReviews.appendChild(card);
-    });
-  });
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
+  // === FIREBASE CONFIG (your values) ===
+  const firebaseConfig = {
+    apiKey: "AIzaSyCcgGn8TrzWXhehhplnmMwnO9CzWi0poUA",
+    authDomain: "maurya-interior.firebaseapp.com",
+    databaseURL: "https://maurya-interior-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "maurya-interior",
+    storageBucket: "maurya-interior.firebasestorage.app",
+    messagingSenderId: "289546553710",
+    appId: "1:289546553710:web:6902612a1c41749832597f",
+    measurementId: "G-JKMR9GLQQQ"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const storage = getStorage(app);
+  // --- Reviews behavior ---
+  let selectedRating = 0;
+  const starsEl = document.getElementById('star-select');
+  const photosInput = document.getElementById('review-photos');
+  const previewEl = document.getElementById('preview-photos');
+  const submitBtn = document.getElementById('submitBtn');
+  const statusEl = document.getElementById('status');
+  // star interaction
+  starsEl.querySelectorAll('span').forEach(s=>{
+    s.addEventListener('click', ()=> {
+      selectedRating = Number(s.dataset.value);
+      renderStars();
+    });
+    s.addEventListener('mouseover', ()=> highlightStars(s.dataset.value));
+    s.addEventListener('mouseout', ()=> renderStars());
+  });
+  function highlightStars(n){
+    starsEl.querySelectorAll('span').forEach(sp=> sp.textContent = (Number(sp.dataset.value) <= n) ? '★' : '☆');
+  }
+  function renderStars(){
+    starsEl.querySelectorAll('span').forEach(sp=> sp.textContent = (selectedRating && Number(sp.dataset.value) <= selectedRating) ? '★' : '☆');
+  }
+  // preview images
+  photosInput.addEventListener('change', ()=>{
+    previewEl.innerHTML = '';
+    const files = photosInput.files;
+    for(let i=0;i<Math.min(5, files.length); i++){
+      const f = files[i];
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(f);
+      img.style.width = '72px';
+      img.style.height = '72px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '6px';
+      img.style.margin = '6px';
+      previewEl.appendChild(img);
+    }
+  });
+  // submit flow
+  submitBtn.addEventListener('click', async ()=>{
+    if(!selectedRating) return alert('Please select a star rating!');
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Uploading...';
+    const text = document.getElementById('review-text').value || '';
+    const files = photosInput.files;
+    const photoUrls = [];
+    try {
+      for(let i=0;i<Math.min(5, files.length); i++){
+        const f = files[i];
+        const r = sRef(storage, 'reviews/' + Date.now() + '_' + Math.random().toString(36).slice(2) + '_' + f.name);
+        await uploadBytes(r, f);
+        const url = await getDownloadURL(r);
+        photoUrls.push(url);
+      }
+      await push(ref(db, 'reviews'), {
+        rating: selectedRating,
+        text,
+        photos: photoUrls,
+        timestamp: Date.now()
+      });
+      statusEl.textContent = 'Review submitted!';
+      // reset
+      selectedRating = 0;
+      renderStars();
+      document.getElementById('review-text').value = '';
+      photosInput.value = '';
+      previewEl.innerHTML = '';
+    } catch(err){
+      console.error(err);
+      alert('Upload failed: ' + (err.message || err));
+      statusEl.textContent = 'Error';
+    } finally {
+      submitBtn.disabled = false;
+      setTimeout(()=> statusEl.textContent = '', 2000);
+    }
+  });
+  // realtime render all reviews
+  const allReviews = document.getElementById('all-reviews');
+  onValue(ref(db, 'reviews'), snap=>{
+    allReviews.innerHTML = '';
+    const items = [];
+    snap.forEach(s => items.push(s.val()));
+    items.sort((a,b)=> b.timestamp - a.timestamp);
+    items.forEach(r=>{
+      const div = document.createElement('div');
+      div.className = 'card rev-card';
+      const starsHtml = '<div class="stars">'+ '★'.repeat(r.rating) + '☆'.repeat(5-r.rating) +'</div>';
+      let imgsHtml = '';
+      if(Array.isArray(r.photos) && r.photos.length){
+        imgsHtml = '<div style="margin-top:8px">';
+        r.photos.forEach(p=> imgsHtml += `<img src="${p}" style="width:80px;margin:5px;border-radius:6px">`);
+        imgsHtml += '</div>';
+      }
+      div.innerHTML = `${starsHtml}<p>${escapeHtml(r.text || '')}</p>${imgsHtml}<div class="small">${new Date(r.timestamp).toLocaleString()}</div>`;
+      allReviews.appendChild(div);
+    });
+  });
+  function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 </script>
 </body>
 </html>
