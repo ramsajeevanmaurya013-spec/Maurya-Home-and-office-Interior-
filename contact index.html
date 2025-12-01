@@ -1,0 +1,115 @@
+Contact 
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Reviews — Maurya Interior</title>
+<style>body{font-family:system-ui,Arial;margin:0;background:#f7f8fb} .container{max-width:1100px;margin:0 auto;padding:16px} header{background:#0b76ef;color:#fff;padding:14px} .card{background:#fff;padding:14px;border-radius:10px;margin-top:12px}</style>
+</head>
+<body>
+  <!-- NAV -->
+  <header>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font-weight:700">Maurya Interior</div>
+      <div style="display:flex;gap:12px">
+        <a href="index.html" style="color:#fff">Home</a>
+        <a href="services.html" style="color:#fff">Services</a>
+        <a href="about.html" style="color:#fff">About</a>
+        <a href="reviews.html" style="color:#fff">Reviews</a>
+        <a href="contact.html" style="color:#fff">Contact</a>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <div class="card">
+      <h2>Customer Reviews</h2>
+      <div id="star-select"><span data-value="1">☆</span><span data-value="2">☆</span><span data-value="3">☆</span><span data-value="4">☆</span><span data-value="5">☆</span></div>
+      <textarea id="review-text" rows="3" placeholder="Write your review..." style="width:100%;margin-top:10px"></textarea>
+      <div style="margin-top:8px">
+        <input id="review-photos" type="file" accept="image/*" multiple />
+        <div id="preview-photos"></div>
+      </div>
+      <div style="margin-top:8px"><button id="submitBtn">Submit Review</button><span id="status" style="margin-left:8px"></span></div>
+    </div>
+    <div class="card" id="list-wrap">
+      <h3>All Reviews</h3>
+      <div id="all-reviews"></div>
+    </div>
+  </main>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcgGn8TrzWXhehhplnmMwnO9CzWi0poUA",
+      authDomain: "maurya-interior.firebaseapp.com",
+      databaseURL: "https://maurya-interior-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "maurya-interior",
+      storageBucket: "maurya-interior.firebasestorage.app",
+      messagingSenderId: "289546553710",
+      appId: "1:289546553710:web:6902612a1c41749832597f"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+    let selectedRating = 0;
+    const starsEl = document.getElementById('star-select');
+    const photosInput = document.getElementById('review-photos');
+    const previewEl = document.getElementById('preview-photos');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusEl = document.getElementById('status');
+    starsEl.querySelectorAll('span').forEach(s=>{
+      s.addEventListener('click', ()=> { selectedRating = Number(s.dataset.value); renderStars(); });
+    });
+    function renderStars(){ starsEl.querySelectorAll('span').forEach(sp=> sp.textContent = (selectedRating && Number(sp.dataset.value) <= selectedRating) ? '★':'☆'); }
+    photosInput.addEventListener('change', ()=> {
+      previewEl.innerHTML = '';
+      const files = photosInput.files;
+      for(let i=0;i<Math.min(5, files.length);i++){
+        const f = files[i];
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(f);
+        img.style.width='72px'; img.style.height='72px'; img.style.objectFit='cover'; img.style.margin='6px';
+        previewEl.appendChild(img);
+      }
+    });
+    submitBtn.addEventListener('click', async ()=>{
+      if(!selectedRating) return alert('Please select rating');
+      submitBtn.disabled = true; statusEl.textContent = 'Uploading...';
+      const text = document.getElementById('review-text').value || '';
+      const files = photosInput.files;
+      const photoUrls = [];
+      try {
+        for(let i=0;i<Math.min(5, files.length);i++){
+          const f = files[i];
+          const p = 'reviews/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'_'+f.name;
+          const r = sRef(storage, p);
+          await uploadBytes(r, f);
+          const url = await getDownloadURL(r);
+          photoUrls.push(url);
+        }
+        await push(ref(db,'reviews'), { rating:selectedRating, text, photos:photoUrls, timestamp:Date.now() });
+        statusEl.textContent = 'Submitted';
+        selectedRating = 0; renderStars(); document.getElementById('review-text').value=''; photosInput.value=''; previewEl.innerHTML='';
+      } catch(err){ alert('Error: '+(err.message||err)); }
+      finally{ submitBtn.disabled = false; setTimeout(()=> statusEl.textContent='',1500); }
+    });
+    const allReviews = document.getElementById('all-reviews');
+    onValue(ref(db,'reviews'), snap=>{
+      allReviews.innerHTML = '';
+      const items = [];
+      snap.forEach(s=> items.push(s.val()));
+      items.sort((a,b)=> b.timestamp - a.timestamp);
+      items.forEach(r=>{
+        const div = document.createElement('div');
+        div.style.marginBottom='12px';
+        const stars = '★'.repeat(r.rating)+ '☆'.repeat(5-r.rating);
+        let imgs='';
+        if(Array.isArray(r.photos)&&r.photos.length){ imgs='<div style="margin-top:8px">'; r.photos.forEach(p=> imgs+=`<img src="${p}" style="width:80px;margin:4px;border-radius:6px">`); imgs+='</div>'; }
+        div.innerHTML = `<div><strong>${stars}</strong></div><div style="margin-top:6px">${escapeHtml(r.text||'')}</div>${imgs}<div style="color:#666;font-size:12px;margin-top:6px">${new Date(r.timestamp).toLocaleString()}</div>`;
+        allReviews.appendChild(div);
+      });
+    });
+    function escapeHtml(s=''){ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  </script>
+</body>
+</html>
